@@ -5,6 +5,10 @@ on:
   release:
     types: [published]
 
+# 授予工作流写入 Release 的权限
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Build on ${{ matrix.os }}
