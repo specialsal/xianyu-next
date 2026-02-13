@@ -18,7 +18,7 @@ var/
 wheels/
 MANIFEST
 *.manifest
-*.spec
+# *.spec  # 注释掉以保留打包配置文件
 .cache
 *.log
 local_settings.py
