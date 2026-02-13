@@ -1,10 +1,5 @@
 # 闲鱼自动回复系统
 
-[![GitHub](https://img.shields.io/badge/GitHub-HJYHJYHJY%2Fxianyu--auto--reply-blue?logo=github)](https://github.com/HJYHJYHJY/xianyu-auto-reply)
-[![Docker](https://img.shields.io/badge/Docker-一键部署-blue?logo=docker)](https://github.com/HJYHJYHJY/xianyu-auto-reply#快速开始)
-[![Python](https://img.shields.io/badge/Python-3.11+-green?logo=python)](https://www.python.org/)
-[![License](https://img.shields.io/badge/License-AGPLv3-blue.svg)](LICENSE)
-
 > **重要提示：本项目采用 AGPLv3 开源协议，请确保遵守开源协议要求。**
 
 一个功能完整的闲鱼自动回复和管理系统，支持多用户、多账号管理，具备智能回复、自动发货、自动确认发货、商品管理等企业级功能。
