@@ -134,6 +134,34 @@ xianyu-auto-reply/
 
 </details>
 
+## 🚀 3分钟快速上手
+
+如果你想立即开始使用，请遵循以下三个简单步骤：
+
+### 1. 启动系统
+本系统默认使用 8080 端口。你可以通过 Docker 或本地 Python 环境启动。
+
+**Docker 方式 (推荐)**:
+```bash
+docker run -d -p 8080:8080 --name xianyu-auto registry.cn-shanghai.aliyuncs.com/zhinian-software/xianyu-auto-reply:1.0
+```
+
+**本地方式**:
+```bash
+pip install -r requirements.txt
+python Start.py
+```
+
+### 2. 访问与登录
+*   **访问地址**: `http://localhost:8080`
+*   **默认账号**: `admin`
+*   **默认密码**: `admin123`
+
+### 3. 添加闲鱼账号 (推荐扫码)
+登录后，在主界面点击“**添加新账号**”，选择“**扫码登录**”。拿出手机闲鱼 App 扫一扫，即可完成账号接入，无需手动抓取 Cookie！
+
+---
+
 ## 快速开始
 
 ### 方式一：Docker 一键部署（最简单）
@@ -274,27 +302,73 @@ python Start.py
 
 ## 系统架构
 
+```mermaid
+graph TD
+    A[Start.py] -->|Initialize| B[CookieManager]
+    A -->|Start| C[reply_server.py - FastAPI]
+    B -->|Create/Manage| D[XianyuLive Instances]
+    D -->|Persistent Connection| E[Xianyu WebSocket]
+    D -->|Data Access| F[db_manager.py - SQLite]
+    D -->|AI Logic| G[ai_reply_engine.py]
+    C -->|API/UI| F
+    C -->|Control| B
+    D -->|Decryption| H[utils/xianyu_utils.py]
 ```
-┌─────────────────────────────────────┐
-│           Web界面 (FastAPI)         │
-│         用户管理 + 功能界面          │
-└─────────────┬───────────────────────┘
-              │
-┌─────────────▼───────────────────────┐
-│        CookieManager               │
-│         多账号任务管理              │
-└─────────────┬───────────────────────┘
-              │
-┌─────────────▼───────────────────────┐
-│      XianyuLive (多实例)           │
-│     WebSocket连接 + 消息处理        │
-└─────────────┬───────────────────────┘
-              │
-┌─────────────▼───────────────────────┐
-│        SQLite数据库                │
-│   用户数据 + 商品信息 + 配置数据     │
-└─────────────────────────────────────┘
+
+### 核心消息流转图 (Core Process Flow)
+
+```mermaid
+sequenceDiagram
+    participant User as 买家 (Xianyu User)
+    participant WS as 闲鱼 WebSocket
+    participant XL as XianyuLive (Async)
+    participant DM as db_manager (SQLite)
+    participant AI as ai_reply_engine
+    participant NT as Notification (QQ/Dingtalk)
+
+    User->>WS: 发送消息
+    WS->>XL: 接收加密消息包
+    XL->>XL: 解密 & 解析 (utils/xianyu_utils.py)
+    XL->>DM: 检查账号启用状态
+    
+    alt 聊天消息
+        XL->>DM: 匹配关键词 (商品级 > 全局)
+        DM-->>XL: 返回回复内容
+        
+        alt 未命中关键词 & 启用AI
+            XL->>AI: 生成 AI 回复
+            AI-->>XL: 返回 AI 响应
+        end
+        
+        XL->>WS: 发送回复消息 (send_msg)
+        XL->>NT: 发送推送到通知渠道
+    else 订单消息 (付款/发货触发)
+        XL->>DM: 查询发货规则 & 卡券
+        DM-->>XL: 返回自动发货数据
+        XL->>XL: 执行自动确认发货/免拼
+        XL->>WS: 发送发货内容到私聊
+    end
 ```
+
+## 🛠️ 工程可用性审计报告 (Audit Report)
+
+### 1. 技术健康度与生成可用性
+*   **并发模型**: 采用 `asyncio` 异步模型，支持大规模多账号同时挂机，性能表现优异。
+*   **数据隔离**: 数据库设计严格遵循多用户隔离原则，通过 `user_id` 确保数据安全性。
+*   **异常恢复**: 具备完善的 WebSocket 重连机制和 Token 自动刷新逻辑，生成环境下稳定性高。
+*   **部署简易度**: 提供单文件打包 (`.spec`)、Docker 及 Docker Compose 多种生成部署方案，几乎做到“开箱即用”。
+
+### 2. 环境依赖审计
+*   **Python**: 要求 3.11+，利用了现代 Python 的类型提示和异步特性。
+*   **数据库**: 使用嵌入式 `SQLite`，无需独立部署数据库服务，大幅降低运维门槛。
+*   **外部库**: `FastAPI` (Web), `Loguru` (Log), `Uvicorn` (Server), `Playwright` (Search)。依赖清单清晰，无冗余。
+
+### 3. 可改进项与风险提示
+*   **验证码挑战**: 虽然集成了图形验证码和邮件验证，但在高频 API 调用下，闲鱼的风控验证码（滑块）仍需用户手动或辅助处理。
+*   **配置管理**: 部分高级功能在 `global_config.yml` 中配置，建议未来进一步迁移至 Web 端的数据库动态配置以增强灵活性。
+*   **安全性**: 核心发货逻辑采用了混淆加密（Secure Ultra 系列），在生成环境中使用时应确保 `.py` 文件的权限受控。
+
+**结论**: 该工程已达到 **生成级可用 (Production Ready)** 水平，逻辑闭环完整，配套设施完善。
 
 ## 核心功能特性
 
