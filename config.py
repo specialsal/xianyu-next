@@ -106,7 +106,7 @@ AUTO_REPLY = config.get('AUTO_REPLY', {
     'default_message': '亲爱的"{send_user_name}" 老板你好！所有宝贝都可以拍，秒发货的哈~不满意的话可以直接申请退款哈~',
     'api': {
         'enabled': False,
-        'url': 'http://localhost:8080/xianyu/reply',
+        'url': 'http://localhost:8181/xianyu/reply',
         'timeout': 10
     }
 })
@@ -119,3 +119,5 @@ else:
     # 兼容旧格式，仅有 value 字段
     val = _cookies_raw.get('value') if isinstance(_cookies_raw, dict) else None
     COOKIES_LIST = [{'id': 'default', 'value': val}] if val else [] 
+#钉钉机器人
+DINGTALK_WEBHOOK = config.get('DINGTALK_WEBHOOK', '')

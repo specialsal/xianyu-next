@@ -178,7 +178,7 @@ echo.
 echo %SUCCESS_PREFIX% 🎉 部署完成！
 echo.
 echo 📱 访问地址:
-echo    HTTP: http://localhost:8080
+echo    HTTP: http://localhost:8181
 echo.
 echo 🔐 默认登录信息:
 echo    用户名: admin

@@ -163,7 +163,7 @@ show_access_info() {
         echo "   HTTPS: https://localhost (如果配置了SSL)"
     else
         echo "📱 访问地址:"
-        echo "   HTTP: http://localhost:8080"
+        echo "   HTTP: http://localhost:8181"
     fi
     
     echo ""
@@ -183,7 +183,7 @@ show_access_info() {
 health_check() {
     print_info "执行健康检查..."
     
-    local url="http://localhost:8080/health"
+    local url="http://localhost:8181/health"
     local max_attempts=30
     local attempt=1
     

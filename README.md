@@ -139,11 +139,11 @@ xianyu-auto-reply/
 如果你想立即开始使用，请遵循以下三个简单步骤：
 
 ### 1. 启动系统
-本系统默认使用 8080 端口。你可以通过 Docker 或本地 Python 环境启动。
+本系统默认使用 8181 端口。你可以通过 Docker 或本地 Python 环境启动。
 
 **Docker 方式 (推荐)**:
 ```bash
-docker run -d -p 8080:8080 --name xianyu-auto registry.cn-shanghai.aliyuncs.com/zhinian-software/xianyu-auto-reply:1.0
+docker run -d -p 8181:8181 --name xianyu-auto registry.cn-shanghai.aliyuncs.com/zhinian-software/xianyu-auto-reply:1.0
 ```
 
 **本地方式**:
@@ -153,7 +153,7 @@ python Start.py
 ```
 
 ### 2. 访问与登录
-*   **访问地址**: `http://localhost:8080`
+*   **访问地址**: `http://localhost:8181`
 *   **默认账号**: `admin`
 *   **默认密码**: `admin123`
 
@@ -172,13 +172,13 @@ mkdir -p xianyu-auto-reply
 
 # 2. 一键启动容器
 docker run -d \
-  -p 8080:8080 \
+  -p 8181:8181 \
   -v $PWD/xianyu-auto-reply/:/app/data/ \
   --name xianyu-auto-reply \
   registry.cn-shanghai.aliyuncs.com/zhinian-software/xianyu-auto-reply:1.0
 
 # 3. 访问系统
-# http://localhost:8080
+# http://localhost:8181
 ```
 
 **Windows用户**：
@@ -187,7 +187,7 @@ docker run -d \
 mkdir xianyu-auto-reply
 
 # 启动容器
-docker run -d -p 8080:8080 -v %cd%/xianyu-auto-reply/:/app/data/ --name xianyu-auto-reply registry.cn-shanghai.aliyuncs.com/zhinian-software/xianyu-auto-reply:1.0
+docker run -d -p 8181:8181 -v %cd%/xianyu-auto-reply/:/app/data/ --name xianyu-auto-reply registry.cn-shanghai.aliyuncs.com/zhinian-software/xianyu-auto-reply:1.0
 ```
 
 ### 方式二：从源码构建部署
@@ -204,7 +204,7 @@ chmod +x docker-deploy.sh
 ./docker-deploy.sh
 
 # 4. 访问系统
-# http://localhost:8080
+# http://localhost:8181
 ```
 
 **Windows用户**：
@@ -243,7 +243,7 @@ playwright install-deps chromium  # Linux需要
 python Start.py
 
 # 6. 访问系统
-# http://localhost:8080
+# http://localhost:8181
 ```
 
 ### 环境要求
@@ -260,12 +260,12 @@ python Start.py
 
 部署完成后，您可以通过以下方式访问系统：
 
-- **Web管理界面**：http://localhost:8080
+- **Web管理界面**：http://localhost:8181
 - **默认管理员账号**：
   - 用户名：`admin`
   - 密码：`admin123`
-- **API文档**：http://localhost:8080/docs
-- **健康检查**：http://localhost:8080/health
+- **API文档**：http://localhost:8181/docs
+- **健康检查**：http://localhost:8181/health
 
 > **安全提示**：首次登录后请立即修改默认密码！
 
@@ -273,7 +273,7 @@ python Start.py
 ## 系统使用
 
 ### 1. 用户注册
-- 访问 `http://localhost:8080/register.html`
+- 访问 `http://localhost:8181/register.html`
 - 填写用户信息，完成邮箱验证
 - 输入图形验证码完成注册
 
@@ -576,7 +576,7 @@ sequenceDiagram
 ## 常见问题
 
 ### 1. 端口被占用
-如果8080端口被占用，可以修改 `.env` 文件中的 `WEB_PORT` 配置。
+如果8181端口被占用，可以修改 `.env` 文件中的 `WEB_PORT` 配置。
 
 ### 2. 数据库连接失败
 检查数据库文件权限，确保应用有读写权限。
